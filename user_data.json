@@ -1,0 +1,37 @@
+{
+  "behavior_list": [
+    {
+      "name": "阅读",
+      "level": "S",
+      "category": "未分类",
+      "start_time": "2026-01-05 18:38:14",
+      "end_time": "2026-01-05 18:38:14",
+      "date": "2026-01-05",
+      "behavior_score": 250.0,
+      "mood_score": 0,
+      "duration": 50,
+      "energy_cost": 250.0
+    }
+  ],
+  "behavior_day_list": [
+    {
+      "name": "阅读",
+      "level": "S",
+      "category": "未分类",
+      "start_time": "2026-01-05 18:38:14",
+      "end_time": "2026-01-05 18:38:14",
+      "date": "2026-01-05",
+      "behavior_score": 250.0,
+      "mood_score": 0,
+      "duration": 50,
+      "energy_cost": 250.0
+    }
+  ],
+  "total_score": 250.0,
+  "day_score": 250.0,
+  "history_score": [],
+  "total_energy": 100,
+  "day_energy": -150.0,
+  "day_energy_cost": 250.0,
+  "history_energy_cost": []
+}

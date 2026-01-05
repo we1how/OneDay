@@ -1,0 +1,11 @@
+{
+  "阅读": {
+    "name": "阅读",
+    "level": "S",
+    "category": "未分类",
+    "base_score": 5,
+    "energy_cost": 5,
+    "level_weight": 1,
+    "chain_weight": 1
+  }
+}
