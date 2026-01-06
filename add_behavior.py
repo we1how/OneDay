@@ -36,10 +36,8 @@ def add_behavior():
         "name": behavior_name,
         "level": level,
         "category": category,
-        "base_score": level_info["base_score"],
-        "energy_cost": level_info["energy_cost"],
-        "level_weight": level_info["level_weight"],
-        "chain_weight": level_info["chain_weight"]
+        "base_score_per_min": level_info["base_score_per_min"],
+        "energy_cost_per_min": level_info["energy_cost_per_min"]
     }
     
     save_behaviors(behaviors)
@@ -48,10 +46,10 @@ def add_behavior():
     print(f"行为名称: {behavior_name}")
     print(f"等级: {level}")
     print(f"类别: {category}")
-    print(f"基础得分: {level_info['base_score']}")
-    print(f"精力消耗: {level_info['energy_cost']}")
-    print(f"等级权重: {level_info['level_weight']}")
-    print(f"连锁权重: {level_info['chain_weight']}")
+    print(f"基础得分/分钟: {level_info['base_score_per_min']}")
+    print(f"精力消耗/分钟: {level_info['energy_cost_per_min']}")
+    print(f"心理锚点: {level_info['mental_anchor']}")
+    print(f"适用行为举例: {level_info['example']}")
     print("========================")
 
 if __name__ == "__main__":
