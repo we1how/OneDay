@@ -143,6 +143,7 @@ def get_current_hour():
     """获取当前小时"""
     return datetime.now().hour
 
+
 def calculate_energy_coefficient(current_energy):
     """计算精力系数"""
     if current_energy > 70:
