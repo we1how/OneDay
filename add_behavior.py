@@ -9,7 +9,7 @@ def add_behavior():
     
     # 输入行为等级
     while True:
-        level = input("请输入行为习惯等级（S/A/B/C/D）: ").upper()
+        level = input("请输入行为习惯等级（S/A/B/C/D/R）: ").upper()
         if level in LEVEL_CONFIG:
             break
         print("无效的等级，请重新输入！")

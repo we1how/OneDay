@@ -30,44 +30,36 @@ def record_behavior():
             break
         print("无效的等级，请重新输入！")
     
-    if level.startswith("R"):
-        # R级行为，不需要从行为列表中选择
-        selected_behavior = level
-        
-        # 初始化得分计算引擎
-        scoring_engine = ScoringEngine(user_data)
-    else:
-        # 普通行为，从行为列表中选择
-        # 筛选该等级的行为
-        level_behaviors = {}
-        for name, info in behaviors.items():
-            if info["level"] == level:
-                level_behaviors[name] = info
-        
-        # 如果该等级没有行为，提示用户
-        if not level_behaviors:
-            print(f"当前等级 {level} 没有任何行为，请先添加该等级的行为！")
-            return
-        
-        # 显示该等级的所有行为
-        print(f"\n=== 等级 {level} 的行为列表 ===")
-        behavior_list = list(level_behaviors.keys())
-        for i, behavior in enumerate(behavior_list, 1):
-            print(f"{i}. {behavior} (类别: {level_behaviors[behavior]['category']})")
-        
-        # 选择行为
-        while True:
-            try:
-                choice = int(input(f"\n请选择要记录的行为编号（1-{len(behavior_list)}）: "))
-                if 1 <= choice <= len(behavior_list):
-                    selected_behavior = behavior_list[choice - 1]
-                    break
-                print(f"无效的选择，请输入1-{len(behavior_list)}之间的数字！")
-            except ValueError:
-                print("无效的输入，请输入数字！")
-        
-        # 初始化得分计算引擎
-        scoring_engine = ScoringEngine(user_data)
+    # 从行为列表中选择该等级的行为
+    level_behaviors = {}
+    for name, info in behaviors.items():
+        if info["level"] == level:
+            level_behaviors[name] = info
+    
+    # 如果该等级没有行为，提示用户
+    if not level_behaviors:
+        print(f"当前等级 {level} 没有任何行为，请先添加该等级的行为！")
+        return
+    
+    # 显示该等级的所有行为
+    print(f"\n=== 等级 {level} 的行为列表 ===")
+    behavior_list = list(level_behaviors.keys())
+    for i, behavior in enumerate(behavior_list, 1):
+        print(f"{i}. {behavior} (类别: {level_behaviors[behavior]['category']})")
+    
+    # 选择行为
+    while True:
+        try:
+            choice = int(input(f"\n请选择要记录的行为编号（1-{len(behavior_list)}）: "))
+            if 1 <= choice <= len(behavior_list):
+                selected_behavior = behavior_list[choice - 1]
+                break
+            print(f"无效的选择，请输入1-{len(behavior_list)}之间的数字！")
+        except ValueError:
+            print("无效的输入，请输入数字！")
+    
+    # 初始化得分计算引擎
+    scoring_engine = ScoringEngine(user_data)
     
     # 用户输入：时长
     while True:
