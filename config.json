@@ -1,0 +1,136 @@
+{
+  "level_config": {
+    "S": {
+      "base_score_per_min": 1.8,
+      "energy_cost_per_min": 0.35,
+      "mental_anchor": "突破性成长",
+      "example": "深度工作、攻克难题、高强度训练"
+    },
+    "A": {
+      "base_score_per_min": 1.2,
+      "energy_cost_per_min": 0.25,
+      "mental_anchor": "有效进步",
+      "example": "学习新知识、创造性工作、专注阅读"
+    },
+    "B": {
+      "base_score_per_min": 0.7,
+      "energy_cost_per_min": 0.18,
+      "mental_anchor": "稳定维持",
+      "example": "复习、整理、轻度运动、家务"
+    },
+    "C": {
+      "base_score_per_min": -0.5,
+      "energy_cost_per_min": 0.10,
+      "mental_anchor": "时间流逝",
+      "example": "无目的刷手机、看无聊视频"
+    },
+    "D": {
+      "base_score_per_min": -1.0,
+      "energy_cost_per_min": 0.15,
+      "mental_anchor": "自我损害",
+      "example": "熬夜、暴食、过度放纵"
+    },
+    "R": {
+      "base_score_per_min": 0,
+      "energy_cost_per_min": 0,
+      "mental_anchor": "恢复行为",
+      "example": "散步、冥想、午睡",
+      "sublevels": {
+        "R1": {
+          "base_score_per_min": 0.2,
+          "energy_cost_per_min": -0.10,
+          "mental_anchor": "轻度放松",
+          "example": "喝茶、听音乐、短暂休息"
+        },
+        "R2": {
+          "base_score_per_min": 0.3,
+          "energy_cost_per_min": -0.20,
+          "mental_anchor": "中等恢复",
+          "example": "散步、瑜伽、阅读休闲书"
+        },
+        "R3": {
+          "base_score_per_min": 0.4,
+          "energy_cost_per_min": -0.30,
+          "mental_anchor": "深度恢复",
+          "example": "午睡、冥想、正念练习"
+        }
+      }
+    }
+  },
+  "mood_config": {
+    "1": {
+      "coefficient": 0.7,
+      "description": "显著降低",
+      "text": "承认今天的艰难"
+    },
+    "2": {
+      "coefficient": 0.85,
+      "description": "适度降低",
+      "text": "不太理想但可接受"
+    },
+    "3": {
+      "coefficient": 1.0,
+      "description": "无影响",
+      "text": "标准状态"
+    },
+    "4": {
+      "coefficient": 1.2,
+      "description": "适度提升",
+      "text": "状态不错"
+    },
+    "5": {
+      "coefficient": 1.4,
+      "description": "显著提升",
+      "text": "巅峰体验"
+    }
+  },
+  "global_config": {
+    "per_time": 1,
+    "energy_max": 120,
+    "energy_low_threshold": 30,
+    "energy_zero_threshold": 0,
+    "low_energy_positive_coeff": 0.9,
+    "low_energy_recovery_bonus": 1.2,
+    "passive_recovery_rate": 0.02,
+    "no_behavior_recovery_rate": 1.5,
+    "cross_day_recovery_default": 50,
+    "b_level_recovery_percent": 0.3,
+    "max_combo_bonus": 1.3,
+    "rebound_bonus": 1.1,
+    "start_bonus_duration": 5,
+    "start_bonus_score": 1.2,
+    "start_bonus_energy": 0.8,
+    "beginner_period_days": 7,
+    "novice_bonus": 1.2,
+    "enable_time_period_coeff": false,
+    "enable_lucky_coeff": false,
+    "enable_mood_coeff": false
+  },
+  "time_period_config": {
+    "golden": {
+      "time_ranges": [[9, 11], [15, 17]],
+      "coefficient": 1.3,
+      "description": "认知高峰期"
+    },
+    "silver": {
+      "time_ranges": [[8, 9], [14, 15], [19, 21]],
+      "coefficient": 1.1,
+      "description": "次佳工作期"
+    },
+    "standard": {
+      "time_ranges": [],
+      "coefficient": 1.0,
+      "description": "正常效率"
+    },
+    "fatigue": {
+      "time_ranges": [[13, 14], [22, 24]],
+      "coefficient": 0.8,
+      "description": "生理低谷"
+    },
+    "rest": {
+      "time_ranges": [[0, 6]],
+      "coefficient": 0.5,
+      "description": "应睡眠时间"
+    }
+  }
+}

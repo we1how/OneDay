@@ -1,4 +1,4 @@
-from data_manager import load_behaviors, save_behaviors, LEVEL_CONFIG
+from data_manager import load_behaviors, LEVEL_CONFIG, add_behavior_to_db
 
 def add_behavior():
     """增加行为界面"""
@@ -31,26 +31,26 @@ def add_behavior():
     # 自动填充等级相关信息
     level_info = LEVEL_CONFIG[level]
     
-    # 保存行为信息
-    behaviors[behavior_name] = {
-        "name": behavior_name,
-        "level": level,
-        "category": category,
-        "base_score_per_min": level_info["base_score_per_min"],
-        "energy_cost_per_min": level_info["energy_cost_per_min"]
-    }
+    # 保存行为信息到数据库
+    success = add_behavior_to_db(
+        behavior_name, level, category,
+        level_info["base_score_per_min"], level_info["energy_cost_per_min"]
+    )
     
-    save_behaviors(behaviors)
-    
-    print(f"\n=== 行为添加成功！ ===")
-    print(f"行为名称: {behavior_name}")
-    print(f"等级: {level}")
-    print(f"类别: {category}")
-    print(f"基础得分/分钟: {level_info['base_score_per_min']}")
-    print(f"精力消耗/分钟: {level_info['energy_cost_per_min']}")
-    print(f"心理锚点: {level_info['mental_anchor']}")
-    print(f"适用行为举例: {level_info['example']}")
-    print("========================")
+    if success:
+        print(f"\n=== 行为添加成功！ ===")
+        print(f"行为名称: {behavior_name}")
+        print(f"等级: {level}")
+        print(f"类别: {category}")
+        print(f"基础得分/分钟: {level_info['base_score_per_min']}")
+        print(f"精力消耗/分钟: {level_info['energy_cost_per_min']}")
+        print(f"心理锚点: {level_info['mental_anchor']}")
+        print(f"适用行为举例: {level_info['example']}")
+        print("========================")
+    else:
+        print(f"\n=== 行为添加失败！ ===")
+        print("该行为可能已存在或数据库操作失败。")
+        print("========================")
 
 if __name__ == "__main__":
     add_behavior()
