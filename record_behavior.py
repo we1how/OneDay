@@ -72,7 +72,7 @@ def record_behavior():
         except ValueError:
             print("无效的输入，请输入数字！")
     
-    # 用户输入：心情（可选，默认3星）
+    # 用户输入：心情（1-5星，默认3星）
     while True:
         mood_input = input("请输入心情（1-5星，默认3星）: ").strip()
         if not mood_input:
@@ -85,6 +85,30 @@ def record_behavior():
             print("心情必须在1-5星之间，请重新输入！")
         except ValueError:
             print("无效的输入，请输入数字！")
+    
+    # 可选详细记录
+    detailed_recording = input("是否添加详细记录？(y/n，默认n): ").strip().lower()
+    
+    specific_time = ""
+    feeling = ""
+    
+    if detailed_recording == "y":
+        # 具体时段
+        specific_time = input("请输入具体时段（如：上午9:00-10:00，可选）: ").strip()
+        
+        # 当时的感受
+        feeling = input("请输入当时的感受（如：感觉放松但分心，可选）: ").strip()
+        
+        # 如果没有输入感受，从心情推测
+        if not feeling:
+            mood_to_feeling = {
+                1: "感觉疲惫",
+                2: "感觉一般",
+                3: "感觉正常",
+                4: "感觉不错",
+                5: "感觉很好"
+            }
+            feeling = mood_to_feeling[mood]
     
     # 获取当前精力
     current_energy = user_data["day_energy"]
@@ -120,7 +144,7 @@ def record_behavior():
     
     # 生成行为记录
     behavior_record = scoring_engine.generate_behavior_record(
-        selected_behavior, behavior_info, level, duration, mood, score_details
+        selected_behavior, behavior_info, level, duration, mood, score_details, specific_time, feeling
     )
     behavior_record["energy_cost"] = final_energy_cost
     behavior_record["is_recovery"] = is_recovery
@@ -142,11 +166,19 @@ def record_behavior():
     print(f"时长: {duration} 分钟")
     print(f"心情: {mood}星 {MOOD_CONFIG[mood]['text']}")
     
+    # 显示详细记录（如果有）
+    if specific_time:
+        print(f"具体时段: {specific_time}")
+    if feeling:
+        print(f"当时的感受: {feeling}")
+    
     if level.startswith("R"):
         print(f"推测子级: {behavior_info['inferred_sublevel']}")
         print(f"心理锚点: {behavior_info['mental_anchor']}")
     else:
-        print(f"行为类别: {behavior_info['category']}")
+        # 从行为列表中获取类别
+        behavior_category = behaviors[selected_behavior].get("category", "未分类")
+        print(f"行为类别: {behavior_category}")
     
     print(f"\n=== 得分详情 ===")
     print(f"基础分: {score_details['base_score']:.2f} (等级基础分: {behavior_info['base_score_per_min']}/分钟)")

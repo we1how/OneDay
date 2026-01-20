@@ -183,7 +183,7 @@ class ScoringEngine:
         
         return score_details
     
-    def generate_behavior_record(self, selected_behavior, behavior_info, level, duration, mood, score_details):
+    def generate_behavior_record(self, selected_behavior, behavior_info, level, duration, mood, score_details, specific_time="", feeling=""):
         """生成行为记录"""
         current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         today = datetime.now().strftime("%Y-%m-%d")
@@ -194,6 +194,8 @@ class ScoringEngine:
             "category": behavior_info.get("category", "未分类"),
             "duration": duration,
             "mood": mood,
+            "specific_time": specific_time,
+            "feeling": feeling,
             "start_time": current_time,
             "end_time": current_time,
             "date": today,
