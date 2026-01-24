@@ -5,6 +5,7 @@ from data_manager import (
 )
 from scoring_engine import ScoringEngine
 from datetime import datetime
+from visualization_engine import VisualizationEngine
 
 def record_behavior():
     """记录行为界面（V3.0精力管理版本）"""
@@ -215,6 +216,17 @@ def record_behavior():
         print("🌟 恭喜！解锁小成就动画！")
     
     print("========================")
+    
+    # 生成行为可视化
+    viz_engine = VisualizationEngine()
+    viz_engine.show_behavior_feedback({
+        "level": level,
+        "duration": duration,
+        "mood": mood,
+        "final_score": final_score,
+        "energy_consume": final_energy_cost
+    })
+    viz_engine.close()
 
 if __name__ == "__main__":
     record_behavior()
