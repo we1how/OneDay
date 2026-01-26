@@ -80,9 +80,25 @@ class StorageEngine:
             )
         ''')
         
+        # 6. 心愿表（V5.0积分兑换系统）
+        self.cursor.execute('''
+            CREATE TABLE IF NOT EXISTS wishes (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER DEFAULT 1,
+                name TEXT NOT NULL,
+                cost INTEGER NOT NULL,
+                status TEXT DEFAULT 'pending',
+                created_at INTEGER DEFAULT (strftime('%s', 'now')),
+                redeemed_at INTEGER,
+                progress REAL DEFAULT 0.0
+            )
+        ''')
+        
         # 创建索引
         self.cursor.execute('CREATE INDEX IF NOT EXISTS idx_behavior_ts ON core_behavior(start_ts)')
         self.cursor.execute('CREATE INDEX IF NOT EXISTS idx_behavior_level ON core_behavior(level)')
+        self.cursor.execute('CREATE INDEX IF NOT EXISTS idx_wishes_user_id ON wishes(user_id)')
+        self.cursor.execute('CREATE INDEX IF NOT EXISTS idx_wishes_status ON wishes(status)')
         
         # 开启WAL模式
         self.cursor.execute('PRAGMA journal_mode=WAL')
@@ -283,6 +299,120 @@ class StorageEngine:
             return json.loads(row[0])
         except json.JSONDecodeError:
             return default
+    
+    # ----------------- 心愿相关（V5.0积分兑换系统） -----------------
+    def add_wish(self, name, cost, user_id=1):
+        """添加新心愿"""
+        try:
+            self.cursor.execute('''
+                INSERT INTO wishes (user_id, name, cost)
+                VALUES (?, ?, ?)
+            ''', (user_id, name, cost))
+            self.conn.commit()
+            return self.cursor.lastrowid
+        except Exception as e:
+            print(f"添加心愿失败: {e}")
+            return None
+    
+    def get_all_wishes(self, user_id=1):
+        """获取用户的所有心愿"""
+        self.cursor.execute('''
+            SELECT * FROM wishes WHERE user_id = ? ORDER BY created_at DESC
+        ''', (user_id,))
+        rows = self.cursor.fetchall()
+        
+        wishes = []
+        for row in rows:
+            wishes.append({
+                "id": row[0],
+                "user_id": row[1],
+                "name": row[2],
+                "cost": row[3],
+                "status": row[4],
+                "created_at": row[5],
+                "redeemed_at": row[6],
+                "progress": row[7]
+            })
+        return wishes
+    
+    def get_pending_wishes(self, user_id=1):
+        """获取用户的待兑换心愿"""
+        self.cursor.execute('''
+            SELECT * FROM wishes WHERE user_id = ? AND status = 'pending' ORDER BY created_at DESC
+        ''', (user_id,))
+        rows = self.cursor.fetchall()
+        
+        wishes = []
+        for row in rows:
+            wishes.append({
+                "id": row[0],
+                "user_id": row[1],
+                "name": row[2],
+                "cost": row[3],
+                "status": row[4],
+                "created_at": row[5],
+                "redeemed_at": row[6],
+                "progress": row[7]
+            })
+        return wishes
+    
+    def get_wish_by_id(self, wish_id, user_id=1):
+        """根据ID获取心愿"""
+        self.cursor.execute('''
+            SELECT * FROM wishes WHERE id = ? AND user_id = ?
+        ''', (wish_id, user_id))
+        row = self.cursor.fetchone()
+        
+        if not row:
+            return None
+        
+        return {
+            "id": row[0],
+            "user_id": row[1],
+            "name": row[2],
+            "cost": row[3],
+            "status": row[4],
+            "created_at": row[5],
+            "redeemed_at": row[6],
+            "progress": row[7]
+        }
+    
+    def redeem_wish(self, wish_id, user_id=1):
+        """兑换心愿"""
+        try:
+            # 更新心愿状态为已兑换
+            self.cursor.execute('''
+                UPDATE wishes SET status = 'redeemed', redeemed_at = ? WHERE id = ? AND user_id = ?
+            ''', (self.get_current_timestamp(), wish_id, user_id))
+            self.conn.commit()
+            return self.cursor.rowcount > 0
+        except Exception as e:
+            print(f"兑换心愿失败: {e}")
+            return False
+    
+    def update_wish_progress(self, wish_id, progress, user_id=1):
+        """更新心愿进度"""
+        try:
+            self.cursor.execute('''
+                UPDATE wishes SET progress = ? WHERE id = ? AND user_id = ?
+            ''', (progress, wish_id, user_id))
+            self.conn.commit()
+            return self.cursor.rowcount > 0
+        except Exception as e:
+            print(f"更新心愿进度失败: {e}")
+            return False
+    
+    def update_all_wishes_progress(self, total_score, user_id=1):
+        """更新所有待兑换心愿的进度"""
+        try:
+            self.cursor.execute('''
+                UPDATE wishes SET progress = ? / cost WHERE user_id = ? AND status = 'pending'
+            ''', (total_score, user_id))
+            self.conn.commit()
+            return True
+        except Exception as e:
+            print(f"更新所有心愿进度失败: {e}")
+            return False
     
     def close(self):
         """关闭数据库连接"""
